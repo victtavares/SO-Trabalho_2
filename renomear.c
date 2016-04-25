@@ -26,7 +26,7 @@ void copyFile(const char* originFileName, const char* prefix) {
     fileDestination = fopen(destinationFileName, "w");
     
     if (!fileDestination) {
-        printf("Erro ao escrever no arquivo de destino: %s\n", destinationFileName);
+        printf("Erro ao abrir o arquivo de destino: %s\n", destinationFileName);
         exit(1);
     }
     
@@ -36,12 +36,23 @@ void copyFile(const char* originFileName, const char* prefix) {
     
     fclose(fileDestination);
     fclose(fileOrigin);
+
+    if (remove(originFileName) != 0) {
+        printf("Erro ao deletar o arquivo de origem: %s\n", originFileName);
+    }
     
 }
 
 int main(int argc, const char * argv[]) {
+
     //number of files + 1
     int fileCount = argc -1;
+
+    //Three files - the current one, the prefix and the file to be copied.
+    if (argc < 3) {
+        printf("Número de argumentos inválido, entre pelo menos 1 arquivo e 1 prefixo para este script.\n");
+        return 1;
+    }
 
     char* prefix = malloc(strlen(argv[fileCount]) + 1);
     strcpy(prefix, argv[fileCount]);
@@ -60,8 +71,8 @@ int main(int argc, const char * argv[]) {
     }
 
     //waiting to exit the parent, to not create zombie projects.
-    int status;
     int waitPid;
+    int status;
     int countFiles = fileCount -1;
     while (countFiles > 0) {
         waitPid = wait(&status);

@@ -1,0 +1,336 @@
+Ubuntu
+Community
+Ask!
+Developer
+Design
+Discourse
+Hardware
+Insights
+Juju
+Shop
+More ›
+Stack Exchange Inbox Reputation and Badges sign up log in tour help  
+
+Search Q&A
+Ask Ubuntu
+Questions
+Tags
+Users
+Badges
+Unanswered
+Ask Question
+_ Ask Ubuntu is a question and answer site for Ubuntu users and developers. It's 100% free. 
+
+Sign up
+Here's how it works:
+Anybody can ask a question Anybody can answer The best answers are voted up and rise to the top
+How can I copy the contents of a folder to another folder in a different directory using terminal?
+
+up vote
+187
+down vote
+favorite
+80
+I am trying to copy the contents of a folder to another folder in a different directory using terminal.
+
+Would somebody be able to provide me an example of the command line syntax required to achieve this?
+
+command-line cp
+shareimprove this question
+edited Jul 12 '15 at 21:54
+
+Seth♦
+20.8k1679133
+asked Dec 11 '11 at 1:19
+
+pandisvezia
+1,081275
+      
+cyberciti.biz/faq/copy-folder-linux-command-line has more clear information. – Dilip Rajkumar Nov 25 '14 at 5:52
+1   
+Why you haven't accepted an answer? – gsamaras Jul 19 '15 at 20:14
+add a comment
+5 Answers
+active oldest votes
+up vote
+260
+down vote
+You can copy the content of a folder /source to another existing folder /dest with the command
+
+cp -a /source/. /dest/
+The -a option is an improved recursive option, that preserve all file attributes, and also preserve symlinks.
+
+The . at end of the source path is a specific cp syntax that allow to copy all files and folders, included hidden ones.
+
+shareimprove this answer
+answered Dec 11 '11 at 12:01
+
+enzotib
+41.1k489121
+7   
+Thank you enzotib! It seems another useful syntax for copy operations. – pandisvezia Dec 11 '11 at 15:52
+      
+Great answer. I will write a real example in case someone is having trouble with this command: sudo cp -a /var/www/opencart/. /var/www/opencart_local/ – pablofiumara Nov 11 '13 at 15:29
+      
+@enzotib I am trying to use this command to copy the contents of "Downloads/textext" to "~/.config/inkscape/extensions/." Using your command I type "cp -a /Downloads/textext/. /~/.config/inkscape/extensions/." but this does not work – Funzies Feb 5 '14 at 11:09 
+      
+@Funzies: probably your command should be: cp -a ~/Downloads/textext/. ~/.config/inkscape/extensions/ – enzotib Feb 6 '14 at 7:58
+1   
+@DylanValade: -a already implies --preserve=all, that is wider than -p = --preserve=mode,ownership,timestamps. – enzotib Dec 22 '14 at 16:22
+show 6 more comments
+
+up vote
+43
+down vote
+An alternate is rsync
+
+rsync -r source/* destination
+The advantages of rsync are:
+
+After the initial sync, it will then copy only the files that have changed.
+You can use it over a network, convenient for files in $HOME, especially config files.
+shareimprove this answer
+answered Dec 11 '11 at 3:59
+
+bodhi.zazen
+51.6k5103202
+      
+Thank you for the alternative! – pandisvezia Dec 11 '11 at 15:58
+      
+thank you very much!! – thecodeparadox Nov 1 '12 at 15:39
+      
+I think you don't need the asterisk. rsync -r source/ destination should be enough, no? – Joschua Dec 17 '15 at 15:10
+add a comment
+up vote
+16
+down vote
+Lets say you have a folder called folder1 in your ~, inside folder1 is 1 file called file1 and 2 folders called sub1 and sub2 each with other files and folders inside them.
+
+To copy all the contents of ~/folder1 to ~/new_folder1 you would use
+
+cp -r ~/folder1/. ~/new_folder1
+new_folder1 would then contain all the files and folders from folder1.
+
+cp is the command to copy using a terminal, -r makes it recursively (so, current directory + further directories inside current) ~/folder1 is the origin folder, ~/new_folder1 is the destination folder for the files/folders inside the origin.
+
+shareimprove this answer
+edited Dec 11 '11 at 14:10
+answered Dec 11 '11 at 1:23
+
+Bruno Pereira
+45.8k18145179
+2   
+it does not catch hidden files – Portablejim Dec 11 '11 at 13:04
+      
+Fixed, should work now. – Bruno Pereira Dec 11 '11 at 14:10
+1   
+Thank you Bruno! It helped me to understand the syntax, though I had to change it a bit(removing ~ sign). Maybe because the destination folder was in /opt, which resides in another file system. And thank you Portablejim to remember the hidden file thing! – pandisvezia Dec 11 '11 at 15:51
+      
+The trailing period is important. Without it, sometimes it may create a new subdirectory ~/new_folder1/folder1 instead of copying the contents over. – wisbucky Jan 19 '15 at 23:00
+add a comment
+up vote
+2
+down vote
+Check this http://www.cyberciti.biz/faq/copy-folder-linux-command-line/ for more information on copying folder. Hope this helps.
+
+cp Command
+cp is a Linux command for copying files and directories. The syntax is as follows:
+
+cp source destination
+cp dir1 dir2
+cp -option  source destination
+cp -option1 -option2  source destination
+In this example copy /home/vivek/letters folder and all its files to /usb/backup directory:
+
+cp -avr /home/vivek/letters /usb/backup
+Where,
+
+-a : Preserve the specified attributes such as directory an file mode, ownership, timestamps, if possible additional attributes: context, links, xattr, all.
+
+-v : Explain what is being done.
+
+-r : Copy directories recursively. Example
+
+Copy a folder called /tmp/conf to /tmp/backup:
+
+$ cp -avr /tmp/conf/ /tmp/backup
+shareimprove this answer
+edited Nov 27 '14 at 11:43
+answered Nov 25 '14 at 5:53
+
+Dilip Rajkumar
+1214
+      
+thank you so much @guntbert for telling y you gave negative. I have updated my answer. Thanks again.. – Dilip Rajkumar Nov 27 '14 at 11:44
+      
+This isn't what the question asks. – cybermonkey Mar 8 '15 at 13:18
+add a comment
+up vote
+1
+down vote
+If there are two folders: (with write permission)
+
+drwxr-xr-x 4 vimal vimal  4096 Sep  9 12:17 .
+drwxr-xr-x 3 root  root   4096 Aug 18 14:35 ..
+drwxrwxrwx 6 vimal vimal  4096 Sep  9 12:15 DATA
+drwxrwxrwx 7 vimal vimal  4096 Sep  9 12:15 PORTAL
+If you are inside the folder called PORTAL where you want to copy all content of another folder say DATA at the same level then you will do
+
+vimal@vimal-D3H:/var/www/html/PORTAL$ cp -a ../DATA/. .
+
+You have to notice 2 dots. Last dot says copy here in present folder
+
+and
+
+one following /DATA/. says that all the CONTENTS inside DATA folder to be copied, and not the DATA folder itself.
+
+If you remove this trailing "." from /DATA/
+
+then whole DATA folder will be copied inside PORTAL(from where you are coping).
+
+shareimprove this answer
+edited Sep 15 '15 at 12:45
+answered Sep 9 '15 at 10:39
+
+vimal krishna
+1113
+add a comment
+protected by kos Apr 22 at 11:11
+
+Thank you for your interest in this question. Because it has attracted low-quality or spam answers that had to be removed, posting an answer now requires 10 reputation on this site. 
+
+Would you like to answer one of these unanswered questions instead?
+
+Not the answer you're looking for?  Browse other questions tagged command-line cp or ask your own question.
+
+asked
+
+4 years ago
+
+viewed
+
+464511 times
+
+active
+
+7 months ago
+
+
+Linked
+
+-5
+How to copy files in Terminal as root user
+1
+How to copy everything from one directory to another using 'cp' command?
+1
+How to copy a directory in Terminal?
+1
+How to: Command line directory duplication?
+Related
+
+0
+Copy files from a directory to a sub-directory (excluding the sub-directory itself)
+3
+How to copy a directory from one hard drive to another with every single file?
+1
+Copying files and folders with cp with shopt extglob - error is not a directory
+1
+Copying files from directories having spaces in its name
+0
+How to view progress of cp command in Terminal?
+0
+how to copy from current folder to another folder
+0
+Why won't my cp command copy whole directories?
+2
+How can I recursively copy files by file extension?
+4
+Problem with input from simple script that copies a file to a different directory
+0
+How copy totally folders between disk
+Hot Network Questions
+
+How would I know if I were a 1 mm tall robot?
+How to tell someone politely that they have a wrong number?
+Is there a story behind the misquote, "Luke, I am your father"?
+Way to carry a wedding band on your person when it's not on your finger
+Is it bad news when an interview is postponed?
+Correct median formula notation
+Does there exist a complex function which is differentiable at one point and nowhere else continuous?
+Why do so many people hike with such light footwear?
+What is a "risk wafer"?
+Why doesn't the latest Ubuntu edition come with the latest stable Linux kernel version?
+Why would I tar a single file?
+Are these tomatoes San Marzano knockoffs?
+Is Academy City really an educational city? What is its purpose?
+For custom game engines, what should I do if my core data is malformed or missing?
+Writing someone else's master's thesis: Unethical and illegal?
+How do you say "nail" (as in "get something right") in French?
+Is it conceivable that President Obama might use the word "queue"?
+How do you make a spherical radio wave?
+A fabric for all seasons
+What is in Fossil Fuel that we can't mass produce?
+Non-Combat XP, with combat later
+Does "cards with the same name can't be played" affect tokens?
+How do payroll-deducted taxes get sent to the IRS?
+Is this a theorem in finite group theory?
+question feed
+about us tour help blog chat data legal privacy policy work here advertising info mobile contact us feedback
+TECHNOLOGY  LIFE / ARTS CULTURE / RECREATION  SCIENCE OTHER
+Stack Overflow
+Server Fault
+Super User
+Web Applications
+Ask Ubuntu
+Webmasters
+Game Development
+TeX - LaTeX
+Programmers
+Unix & Linux
+Ask Different (Apple)
+WordPress Development
+Geographic Information Systems
+Electrical Engineering
+Android Enthusiasts
+Information Security
+Database Administrators
+Drupal Answers
+SharePoint
+User Experience
+Mathematica
+Salesforce
+ExpressionEngine® Answers
+more (13)
+Photography
+Science Fiction & Fantasy
+Graphic Design
+Movies & TV
+Seasoned Advice (cooking)
+Home Improvement
+Personal Finance & Money
+Academia
+more (9)
+English Language & Usage
+Skeptics
+Mi Yodeya (Judaism)
+Travel
+Christianity
+Arqade (gaming)
+Bicycles
+Role-playing Games
+more (21)
+Mathematics
+Cross Validated (stats)
+Theoretical Computer Science
+Physics
+MathOverflow
+Chemistry
+Biology
+more (5)
+Stack Apps
+Meta Stack Exchange
+Area 51
+Stack Overflow Careers
+site design / logo © 2016 Stack Exchange Inc; user contributions licensed under cc by-sa 3.0 with attribution required
+rev 2016.4.25.3510
+Ubuntu and Canonical are registered trademarks of Canonical Ltd.
