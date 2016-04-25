@@ -12,7 +12,6 @@ void copyFile(const char* originFileName, const char* prefix) {
     FILE *fileOrigin, *fileDestination;
     char contentChar;
 
-    printf("on file: %s\n", originFileName);
 
     fileOrigin = fopen(originFileName, "r");
     if (!fileOrigin) {
@@ -39,6 +38,7 @@ void copyFile(const char* originFileName, const char* prefix) {
 
     if (remove(originFileName) != 0) {
         printf("Erro ao deletar o arquivo de origem: %s\n", originFileName);
+        exit(1);
     }
     
 }
@@ -65,8 +65,6 @@ int main(int argc, const char * argv[]) {
             copyFile(originFileName, prefix);
             free(originFileName);
             exit(0);
-        } else {
-            printf("Criando processo com PID %ld\n", (long) pid);
         }  
     }
 
@@ -76,7 +74,6 @@ int main(int argc, const char * argv[]) {
     int countFiles = fileCount -1;
     while (countFiles > 0) {
         waitPid = wait(&status);
-        //printf("Filho finalizado com pid %ld\n", (long)waitPid);
         --countFiles; 
     }   
 

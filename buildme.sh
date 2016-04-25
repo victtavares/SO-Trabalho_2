@@ -10,4 +10,6 @@ echo "Running Tests..."
 # ./renomear test1.txt
 # ./renomear test1.txt pre--
 
-./renomear test1.txt test2.txt test3.txt test4.txt test5.txt test6.txt test7.txt prefix-
+#./renomear test1.txt test2.txt test3.txt test4.txt test5.txt test6.txt test7.txt prefix-
+
+./renomear test1.txt test212.txt test3.txt test4.txt test5.txt test6.txt test7.txt bula-
